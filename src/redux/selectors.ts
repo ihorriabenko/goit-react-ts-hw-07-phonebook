@@ -1,6 +1,10 @@
 import { Phonebook } from '../types/phonebook';
 
-const getSelContacts = (state: Phonebook) => state.contacts;
-const getSelFilter = (state: Phonebook) => state.filter;
+interface SelState {
+  phonebook: Phonebook;
+}
+
+const getSelContacts = (state: SelState) => state.phonebook.contacts;
+const getSelFilter = (state: SelState) => state.phonebook.filter;
 
 export { getSelContacts, getSelFilter };
