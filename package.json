@@ -1,8 +1,8 @@
 {
-  "name": "goit-react-ts-hw-06-phonebook",
+  "name": "goit-react-ts-hw-07-phonebook",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://iryabenkoff.github.io/goit-react-ts-hw-06-phonebook",
+  "homepage": "https://iryabenkoff.github.io/goit-react-ts-hw-07-phonebook",
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.17.0",
