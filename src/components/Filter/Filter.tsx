@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { filtered } from '../../redux/phonebookSlice';
+import { filtered } from '../../redux/filterSlice';
 import { getSelFilter } from '../../redux/selectors';
 import s from './filter.module.css';
 

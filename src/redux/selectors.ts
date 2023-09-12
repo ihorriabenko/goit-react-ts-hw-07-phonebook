@@ -1,10 +1,9 @@
-import { Phonebook } from '../types/phonebook';
+import { Filter } from '../types/phonebook';
 
 interface SelState {
-  phonebook: Phonebook;
+  filter: Filter;
 }
 
-const getSelContacts = (state: SelState) => state.phonebook.contacts;
-const getSelFilter = (state: SelState) => state.phonebook.filter;
+const getSelFilter = (state: SelState) => state.filter.filter;
 
-export { getSelContacts, getSelFilter };
+export { getSelFilter };

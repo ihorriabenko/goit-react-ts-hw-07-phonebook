@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import { ContactWithoutId } from '../../types/phonebook';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { nanoid } from '@reduxjs/toolkit';
-import { added } from '../../redux/phonebookSlice';
 import s from './contactsForm.module.css';
-import { getSelContacts } from '../../redux/selectors';
+import {
+  useAddContactMutation,
+  useFetchContactsQuery,
+} from '../../redux/phonebookApiSlice';
 
 const ContactsForm: React.FC = (): JSX.Element => {
   const [contact, setContact] = useState({
     name: '',
     phoneNumber: '',
   });
-
-  const dispatch = useAppDispatch();
-  const contacts = useAppSelector(getSelContacts);
+  const [addContact] = useAddContactMutation();
+  const { data: contacts } = useFetchContactsQuery();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setContact((prev) => ({
@@ -22,25 +22,28 @@ const ContactsForm: React.FC = (): JSX.Element => {
     }));
   };
 
-  const addContact = (contact: ContactWithoutId) => {
-    const userExists = contacts.find(
+  const handleAddContact = async (contact: ContactWithoutId) => {
+    const userExists = contacts!.find(
       (el) => el.name.toLowerCase() === contact.name.toLowerCase()
     );
 
     if (userExists) return alert(`${userExists.name} already in contacts`);
 
-    dispatch(
-      added({
+    try {
+      await addContact({
         id: nanoid(),
+        createdAt: Date.now().toString(),
         ...contact,
-      })
-    );
+      });
+    } catch (error) {
+      throw error;
+    }
   };
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
 
-    addContact(contact);
+    handleAddContact(contact);
 
     setContact({ name: '', phoneNumber: '' });
   };

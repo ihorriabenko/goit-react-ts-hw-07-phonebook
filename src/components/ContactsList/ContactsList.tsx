@@ -1,38 +1,42 @@
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { removed } from '../../redux/phonebookSlice';
-import { getSelContacts, getSelFilter } from '../../redux/selectors';
+import { useAppSelector } from '../../redux/hooks';
+import { useFetchContactsQuery } from '../../redux/phonebookApiSlice';
+import { getSelFilter } from '../../redux/selectors';
+import ContactItem from '../ContactItem/ContactItem';
 import s from './contactsList.module.css';
 
 const ContactsList: React.FC = (): JSX.Element => {
-  const contacts = useAppSelector(getSelContacts);
   const filter = useAppSelector(getSelFilter);
-  const dispatch = useAppDispatch();
-
-  const removeContact = (id: string) => {
-    dispatch(removed(id));
-  };
+  const { data: contacts, isLoading, error } = useFetchContactsQuery();
 
   const renderContacts = () => {
     const filterValue = filter.toLowerCase();
 
-    return contacts.filter(({ name }) => {
+    return contacts!.filter(({ name }) => {
       const nameValue = name.toLowerCase();
 
       return nameValue.includes(filterValue);
     });
   };
 
-  const getContacts = renderContacts().map((el) => (
-    <li className={s.item} key={el.id}>
-      <p>{el.name}</p>
-      <p>{el.phoneNumber}</p>
-      <button className={s.btn} onClick={() => removeContact(el.id)}>
-        x
-      </button>
-    </li>
-  ));
+  const getContacts =
+    !isLoading && !error
+      ? renderContacts().map((el) => (
+          <ContactItem
+            key={el.id}
+            id={el.id}
+            name={el.name}
+            phoneNumber={el.phoneNumber}
+          />
+        ))
+      : [];
 
-  return <>{getContacts && <ul className={s.list}>{getContacts}</ul>}</>;
+  return (
+    <>
+      {isLoading && <p>Loading...</p>}
+      {error && <p>Error :(</p>}
+      {getContacts.length > 0 && <ul className={s.list}>{getContacts}</ul>}
+    </>
+  );
 };
 
 export default ContactsList;

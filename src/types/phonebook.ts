@@ -6,7 +6,6 @@ export interface Contact {
 
 export interface ContactWithoutId extends Omit<Contact, 'id'> {}
 
-export interface Phonebook {
-  contacts: Contact[];
+export interface Filter {
   filter: string;
 }
